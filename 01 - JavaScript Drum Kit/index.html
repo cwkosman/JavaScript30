@@ -59,23 +59,31 @@
 
 <script>
 
+function playSound(e) {
+  const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+  const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+  // const is new in ECMAScript 6; it allows assignment of a variable that won't be reassigned
+  //${} is notation for an ES 6 template string; in earlier ES versions, this would be ("audio[data-key=\"" + e.keyCode + "\"]")
+  if (!audio) return; //stop the function from running if no audio element containing the keyCode of the pressed key as a data-key attribute is present
+  audio.currentTime=0; //rewind to start, allows pressing key in rapid succession
+  audio.play();
+  key.classList.add('playing');
+};
 
-  function playSound(e) {
-    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
-    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
-    if (!audio) return; // stop the function from running all together
-    audio.currentTime = 0; // rewind to the start
-    audio.play();
-    key.classList.add('playing');
-  }
-  function removeTransition(e) {
-    if (e.propertyName !== 'transform') return; // skip it if it's not a transform
-    this.classList.remove('playing');
-  }
+function removeTransition(e) {
+  if(e.propertyName !== 'transform') return; //skip if it's not a transform, because many different css properties are transitioning and you only need the eventListener to look at one
+  this.classList.remove('playing');
+}
 
-  const keys = document.querySelectorAll('.key');
-  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
-  window.addEventListener('keydown', playSound);
+const keys = document.querySelectorAll('.key');
+keys.forEach (key => key.addEventListener('transitionend', removeTransition));
+/*Arrow functions are also new in ES6. In the above example, it provides a concise way of expressing a function.
+The arguments used in the function are listed before the arrow, the expression after the arrow is the function.
+The old way would be writing:
+keys.forEach(function(key) {
+  return key.AddEventListener('transitionend', removeTransition);
+});*/
+window.addEventListener('keydown', playSound);
 
 </script>
 

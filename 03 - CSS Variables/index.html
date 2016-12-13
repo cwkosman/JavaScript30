@@ -13,6 +13,7 @@
 
     <label for="blur">Blur:</label>
     <input type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+    <!-- data-sizing is a custom attribute to specify the suffix of the css property -->
 
     <label for="base">Base Color</label>
     <input type="color" name="base" value="#2e8efc">
@@ -75,10 +76,12 @@
   const inputs = document.querySelectorAll(".controls input");
 
  function handleUpdate() {
-    console.log(this.value);
+    const suffix = this.dataset.sizing || '';
+    document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix)
   }
 
-  inputs.forEach (input => input.addEventListener('change', handleUpdate));
+  inputs.forEach (input => input.addEventListener('change', handleUpdate)); /*updates when you let go*/
+  inputs.forEach (input => input.addEventListener('mousemove', handleUpdate)); /*changes when moved*/
 
   </script>
 

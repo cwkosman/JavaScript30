@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Understanding JavaScript's Capture</title>
+</head>
+<body class="bod">
+
+  <div class="one">
+    <div class="two">
+      <div class="three">
+      </div>
+    </div>
+  </div>
+
+<style>
+  html {
+    box-sizing: border-box;
+  }
+  *, *:before, *:after { box-sizing: inherit; }
+
+  div {
+    width:100%;
+    padding:100px;
+  }
+
+  .one {
+    background: thistle;
+  }
+
+  .two {
+    background:mistyrose;
+  }
+
+  .three {
+    background:coral;
+  }
+</style>
+
+<script>
+const divs = document.querySelectorAll('div');
+
+function logText(e) {
+  console.log(this.classList.value);
+  //e.stopPropagation(); stop bubble/capture
+}
+
+divs.forEach(div => div.addEventListener('click',logText, {
+  capture: false,
+  once:true
+}));
+
+//bubble goes from deepest to shallowest, the default behaviour (capture: false)
+//stopPropagation(); prevents bubble or capture
+//capture:true goes in capture order, from shallowest to deepest
+//once unbinds a function. In this instance, it would be the same as firing div.removeListener('click',logText). This option is relatively new. A practical example: a store checkout button.
+
+</script>
+</body>
+</html>
